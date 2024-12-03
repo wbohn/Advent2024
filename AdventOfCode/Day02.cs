@@ -1,6 +1,19 @@
 ﻿namespace AdventOfCode;
 public class Day02 : AbstractBaseDay
 {
+    public Day02()
+    {
+        int safeCount = 0;
+        foreach (var safetyReport in _inputLines)
+        {
+            var levels = safetyReport.Split(" ")
+                .Select(int.Parse);
+            if (IsSortedSafely(levels))
+            {
+                safeCount++;
+            }
+        }
+    }
     public override ValueTask<string> Solve_1()
     {
         int safeCount = 0;
@@ -18,7 +31,29 @@ public class Day02 : AbstractBaseDay
 
     public override ValueTask<string> Solve_2()
     {
-        throw new NotImplementedException();
+        int safeCount = 0;
+        foreach (var safetyReport in _inputLines)
+        {
+            var levels = safetyReport.Split(" ")
+                .Select(int.Parse);
+            if (IsSortedSafely(levels))
+            {
+                safeCount++;
+            }
+            else
+            {
+                for (int i = 0; i < levels.Count(); i++)
+                {
+                    var newLevels = levels.Where((_, index) => index != i);
+                    if (IsSortedSafely(newLevels))
+                    {
+                        safeCount++;
+                        break;
+                    }
+                }
+            }
+        }
+        return new ValueTask<string>(safeCount.ToString());
     }
 
     static bool IsSortedSafely(IEnumerable<int> levels)
